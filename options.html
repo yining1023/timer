@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Timer Options</title>
+    <link rel="stylesheet" href="options.css" />
+    <script src="options.js"></script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>Timer Options</h1>
+      <div id="info">
+        <span>
+          Like Timer? <!-- <a target="_blank" href="https://chrome.google.com/webstore/detail/web-timer/ggnjbdfgigejghknieofeahaknkjafim/reviews"> -->Leave a review!</a>
+        </span>
+        <br />
+        <span>
+          Problems? Questions? Feature requests? <!-- <a target="_blank" href="https://chrome.google.com/webstore/detail/web-timer/ggnjbdfgigejghknieofeahaknkjafim/details"> -->Send feedback!<!-- </a> -->
+        </span>
+      </div>
+    </div>
+    <div id="settings">
+      <table>
+        <tbody>
+
+          <tr>
+            <th>
+            Set Alarm for these Websites<br />
+            (one per line)
+            </th>
+            <td><textarea id="tracklist">netflix.com&#13;&#10;facebook.com&#13;&#10;youtube.com</textarea></td>
+            <td id="tracklist-description" class="description">Timer will set alarm for these site, when the time is up, it will give you notification.</td>
+          </tr>
+
+          <tr>
+            <th>
+            Ignore these Websites<br />
+            (one per line)
+            </th>
+            <td><textarea id="blacklist"></textarea></td>
+            <td id="blacklist-description" class="description">Timer will not track any sites you put on this list. Any existing data for sites on the list will be removed.</td>
+          </tr>
+          <tr>
+            <th>Chart Display Limit</th>
+            <td>
+              <label>Show Top</label>
+              <input id="chart_limit" type="text" size="2" maxlength="2" />
+              <label>Sites</label>
+            </td>
+            <td id="limit-description" class="description">Sites below the limit will be grouped into the "Other" category.</td>
+          </tr>
+          <tr>
+            <th>Storage</th>
+            <td><button id="clear-data">Clear Data</button></td>
+            <td id="storage-description" class="description">There is no way to recover your data once you delete it.</td>
+        </tbody>
+      </table>
+    </div>
+    <div id="footer">
+      <button id="save-button">Save</button>
+      <span id="status"></span>
+    </div>
+  </body>
+</html>

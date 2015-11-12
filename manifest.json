@@ -1,0 +1,35 @@
+{
+  "manifest_version": 2,
+  "name": "Timer",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": ["jquery.js"]
+    }
+  ],
+  "description": "Keep track of how you spend your time on the web.",
+  "icons": { "128": "icon_128.png" },
+  "background": {
+    "scripts": ["background.js", "eventPage.js"],
+    "persistent": false
+  },
+  "permissions": [
+    "storage",
+    "idle",
+    "tabs",
+    "activeTab",
+    "alarms",
+    "notifications",
+    "https://ajax.googleapis.com/"
+  ],
+  "browser_action": {
+    "default_title": "Timer",
+    "default_icon": "icon_19.png",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google.com https://platform.twitter.com; object-src 'self'"
+}
