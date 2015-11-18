@@ -17,6 +17,7 @@
     "persistent": false
   },
   "permissions": [
+    "notifications",
     "storage",
     "idle",
     "tabs",

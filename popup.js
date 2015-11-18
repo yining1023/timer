@@ -3,7 +3,14 @@ var netflix = false;
 var barTimerSt = false
 
 var i = 100;
-var time = 15;
+// var time = 15;
+
+// Extract the domain from the url
+// e.g. http://google.com/ -> google.com
+function extractDomain(url) {
+  var re = /:\/\/(www\.)?(.+?)\//;
+  return url.match(re)[2];
+}
 
 function getCurrentTabUrl(callback) {
   var queryInfo = {
@@ -13,6 +20,8 @@ function getCurrentTabUrl(callback) {
   chrome.tabs.query(queryInfo, function(tabs) {
     var tab = tabs[0];
     var url = tab.url;
+    var domain = extractDomain(url);
+    document.getElementById('cureent_tab').innerHTML += domain;
       if(url.indexOf("netflix") > -1){
         netflix = true;
       }
@@ -25,49 +34,34 @@ function getCurrentTabUrl(callback) {
 var alarmClock = {
         onHandler : function(e) {
           console.log("netflix: " + netflix);
-          if(netflix){
-            chrome.alarms.create("myAlarm", {delayInMinutes: 0.25, periodInMinutes: 0.25} );}
+          // if(netflix){
+            // chrome.alarms.create("myAlarm", {delayInMinutes: 0.25, periodInMinutes: 0.25} );}
                     // window.close();
-                    console.log("alarm is on now!");
+                    // console.log("alarm is on now!");
         },
 
         offHandler : function(e) {
             chrome.alarms.clear("myAlarm");
                     window.close();
-        },
-
-        setup: function() {
-            var a = document.getElementById('alarmOn');
-            a.addEventListener('click', alarmClock.onHandler);
-            var a = document.getElementById('alarmOff');
-            a.addEventListener('click', alarmClock.offHandler);
         }
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-    getCurrentTabUrl(function(url) {
-      console.log("url: "+url);
-      });
-    alarmClock.setup();
-    console.log("alarm sestup!");
-});
-
-var counterBack = setInterval(function(){
-  console.log(netflix);
-  if(netflix){
-    i-=100/time;
-    if(i>0){
-     $('.progress-bar').css('width', i+'%');
-     } else if (i===0){
-      clearTimeout(counterBack);
-    } 
- }
-}, 1000);
+// var counterBack = setInterval(function(){
+//   console.log(netflix);
+//   if(netflix){
+//     i-=100/time;
+//     if(i>0){
+//      $('.progress-bar').css('width', i+'%');
+//      } else if (i===0){
+//       clearTimeout(counterBack);
+//     } 
+//  }
+// }, 1000);
 
 var bg = chrome.extension.getBackgroundPage();
 
 // Load the Visualization API and the piechart package.
-google.load('visualization', '1.0', {'packages':['corechart', 'table']});
+// google.load('visualization', '1.0', {'packages':['corechart', 'table']});
 // google.load('visualization', '1.1', {'packages':["bar"]});
 google.load("visualization", "1", {packages:["corechart"]});
 // google.setOnLoadCallback(drawBasic);
@@ -294,12 +288,13 @@ function drawChart(chart_data) {
 }
 
 function drawBasic(chart_data){
-  console.log(chart_data);
+  // console.log(chart_data);
   var bardata = new google.visualization.DataTable();
   bardata.addColumn('string', 'Domain');
   bardata.addColumn('number', 'Time');
+  // bardata.addColumn('string', 'role:\'style\'');
   bardata.addRows(chart_data);
-  console.log(bardata);
+  // console.log(bardata);
 
   var view = new google.visualization.DataView(bardata);
       view.setColumns([0, 1,
@@ -308,20 +303,13 @@ function drawBasic(chart_data){
                          type: "string",
                          role: "annotation" }
                        ]);
-  console.log(view);
+  // console.log(view);
 
   var options = {
-    // title: 'Population of Largest U.S. Cities',
+    title: 'Time you spent on the most visited Websites',
     width: 700,
     legend: { position: 'none' },
         chartArea: {width: '50%'},
-        // hAxis: {
-        //   // title: 'Time',s
-        //   minValue: 0
-        // },
-        // vAxis: {
-        //   // title: 'Domains'
-        // },
         bars: 'horizontal',
         axes: {
             x: {
@@ -338,7 +326,7 @@ function drawBasic(chart_data){
 }
 
 function drawTable(table_data, type) {
-  var data = new google.visualization.DataTable();
+  // var data = new google.visualization.DataTable();
   // data.addColumn('string', 'Domain');
   var timeDesc;
   if (type === bg.TYPE.today) {
@@ -351,18 +339,18 @@ function drawTable(table_data, type) {
     console.error("No such type: " + type);
   }
 
-  data.addColumn('number', "Total Time Spent (" + timeDesc + "): ");
-  data.addColumn('string', table_data[0][0].f);
-  // data.addRows(table_data);
-  console.log(table_data);
-  console.log(table_data[0][0].f);
+  // data.addColumn('number', "Total Time Spent (" + timeDesc + "): ");
+  // data.addColumn('string', table_data[0][0].f);
 
-  var options = {
-    allowHtml: true,
-    sort: 'disable'
-  };
-  var table = new google.visualization.Table(document.getElementById('table_div'));
-  table.draw(data, options);
+  document.getElementById('total_time').innerHTML = "Total Time Spent (" + timeDesc + "): ";
+  document.getElementById('total_time').innerHTML += table_data[0][0].f;
+
+  // var options = {
+  //   allowHtml: true,
+  //   sort: 'disable'
+  // };
+  // var table = new google.visualization.Table(document.getElementById('table_div'));
+  // table.draw(data, options);
 }
 
 function share() {
@@ -371,11 +359,77 @@ function share() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelector('#today').addEventListener('click', function() { show(bg.TYPE.today); });
-  document.querySelector('#average').addEventListener('click', function() { show(bg.TYPE.average); });
-  document.querySelector('#all').addEventListener('click', function() { show(bg.TYPE.all); });
+  document.addEventListener('DOMContentLoaded', function () {
+    getCurrentTabUrl(function(url) {
+      console.log("url: "+url);
+    });
+    // document.getElementById('alarmOff').addEventListener('click', alarmClock.offHandler);
+    document.querySelector('#today').addEventListener('click', function() { show(bg.TYPE.today); });
+    document.querySelector('#average').addEventListener('click', function() { show(bg.TYPE.average); });
+    document.querySelector('#all').addEventListener('click', function() { show(bg.TYPE.all); });
+    document.querySelector('#options').addEventListener('click', showOptions);
+    document.querySelector('#start').addEventListener('click', countdownTimer);
+    document.querySelector('#start').addEventListener('click', alarm);
 
-  document.querySelector('#options').addEventListener('click', showOptions);
   // document.querySelector('#share').addEventListener('click', share);
 });
+    /* Function to display a Countdown timer with starting time from a form */
+    // sets variables for minutes and seconds
+var ctmnts = 0;
+var ctsecs = 0;
+var startchr = 0;// used to control when to read data from form
+
+function alarm(){
+  var time = ctmnts+ctsecs/60;
+  console.log("created an alarm");
+  chrome.alarms.create("myAlarm", {delayInMinutes: time, periodInMinutes: time});
+}
+
+function countdownTimer() {
+  // http://coursesweb.net/javascript/
+  // if $startchr is 0, and form fields exists, gets data for minutes and seconds, and sets $startchr to 1
+  if(startchr == 0 && document.getElementById('mns') && document.getElementById('scs')) {
+    // makes sure the script uses integer numbers
+    ctmnts = parseInt(document.getElementById('mns').value) + 0;
+    ctsecs = parseInt(document.getElementById('scs').value) * 1;
+
+    // if data not a number, sets the value to 0
+    if(isNaN(ctmnts)) ctmnts = 0;
+    if(isNaN(ctsecs)) ctsecs = 0;
+
+    // rewrite data in form fields to be sure that the fields for minutes and seconds contain integer number
+    document.getElementById('mns').value = ctmnts;
+    document.getElementById('scs').value = ctsecs;
+    startchr = 1;
+    document.getElementById('start').setAttribute("disabled", "disabled");     // disable the button
+  }
+
+  // if minutes and seconds are 0, sets $startchr to 0, and return false
+  if(ctmnts==0 && ctsecs==0) {
+    startchr = 0;
+    document.getElementById('start').removeAttribute('disabled');     // remove "disabled" to enable the button
+
+    /* HERE YOU CAN ADD TO EXECUTE A JavaScript FUNCTION WHEN COUNTDOWN TIMER REACH TO 0 */
+    return false;
+  }
+  else {
+    // decrease seconds, and decrease minutes if seconds reach to 0
+    ctsecs--;
+    if(ctsecs < 0) {
+      if(ctmnts > 0) {
+        ctsecs = 59;
+        ctmnts--;
+      }
+      else {
+        ctsecs = 0;
+        ctmnts = 0;
+
+      }
+    }
+  }
+
+  // display the time in page, and auto-calls this function after 1 seccond
+  document.getElementById('showmns').innerHTML = ctmnts;
+  document.getElementById('showscs').innerHTML = ctsecs;
+  setTimeout('countdownTimer()', 1000);
+}
