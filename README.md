@@ -1,6 +1,4 @@
-## Web Timer
+## Timile
 
-Web Timer is a Chrome extension designed to help you keep track of how
-you're using your time online.
+Timile is a Chrome extension that helps you keep track of the time you spend on various websites and helps you set an alarm for these websites.
 
-Check it out in the [Chrome Web Store](http://webtimerapp.com)!

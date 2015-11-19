@@ -6,3 +6,19 @@ Set alerts for the following websites if you reach your set time limit for each 
 1. _____________________________   _____
 2. _____________________________   _____
 3. _____________________________   _____
+
+
+todo list
+0. how to still let 00:00 alarm count time when people close the popup window, chrome.alarm is right.
+1. countdown time only the current tab is netflix
+
+2. custmise the notification confirm window content
+
+3. style the whole interface
+4. presentation: survey           check!
+5. tell the story                 check!
+6. introduce all the features
+7. name: timile:), logo
+8. user study?
+
+Uncaught TypeError: Cannot read property 'TYPE' of null

@@ -4,9 +4,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
     <style type="text/css">
       body {
+          background-color: #a8deef;
+          /*background-color: #555555;*/
           width: 600px;
-          font-family: helvetica, arial, sans-serif;
-          font-size: 13px;
+          height: 600px;
+          font-family: lato;
+          font-size: 14px;
+          /*color: #ffffff;*/
       }
       #nav {
           float: right;
@@ -30,10 +34,11 @@
           text-decoration: underline;
       }
       #data {
-          margin-top: 10px;
+          margin-top: 5px;
       }
       #barchart_div {
-          margin-top: 15px;
+          /*font-family: Futura, 'Trebuchet MS', Arial, sans-serif;*/
+          margin-top: 0px;
           width:200px;
           height:300px;
       }
@@ -46,12 +51,45 @@
           font-weight: bold;
       }
       #total_time {
-          font-weight: 600;
+          position: absolute;
+          font-weight: 700;
+          top: 311px;
+          left: 174.5px;
+          font-size:14px;
+          z-index:100;
           /*text-align: center;*/
       }
       #nodata a {
           text-decoration: underline;
           color: red;
+      }
+      #cureent_tab{
+          position: absolute;
+          left: 32px;
+      }
+      #cureent_tab_url{
+          position: absolute;
+          left: 175px;
+          font-weight: 800;
+      }
+      #input_time{
+          position: absolute;
+          left: 48px;
+      }
+      #notifi{
+          position: absolute;
+          left: 23.5px;
+      }
+      #count{
+          position: absolute;
+          left: 46px;
+          top: 478px;
+      }
+      #countDown{
+          position: absolute;
+          left: 175px;
+          font-size:20pt;
+          font-weight: 800;
       }
       th {
           text-align: right;
@@ -60,6 +98,14 @@
       }
       th, td {
           vertical-align: top;
+      }
+      textarea{
+          
+      }
+      #start{
+          position: absolute;
+          left: 466px;
+          top: 440px;
       }
     </style>
 
@@ -70,6 +116,7 @@
     <script src="/bootstrap.min.js"></script>
     <!-- Load popup script -->
     <script src="popup.js"></script>
+    <script src="eventPage.js"></script>
   </head>
 
   <body>
@@ -91,35 +138,42 @@
       <span id="nodata">Start browsing to collect usage data.</span>
       <div id="total_time"></div>
       <div id="barchart_div"></div>
+      
       <div id="table_div"></div>
       &nbsp;
       &nbsp;  
     </div>
 
     <div id="alarm">
-      <div id="cureent_tab">You are currently on:&nbsp;</div>
+      <div id="cureent_tab">You are currently on:&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      <div id="cureent_tab_url"></div>
       <br />
       <!-- <div id="setText">Set a timer for this site:&nbsp;</div> -->
 
-    <form>
-      How long to you want to stay:
-      Minutes: <input type="text" id="mns" name="mns" value="0" size="3" maxlength="3" /> &nbsp; &nbsp; Seconds: <input type="text" id="scs" name="scs" value="0" size="2" maxlength="2" /><br/>
+    <form id="input_time">
+      Let's stay here for:&nbsp; &nbsp;
+      <input type="text" id="mns" name="mns" value="0" size="3" maxlength="3" />Minutes &nbsp; &nbsp; <input type="text" id="scs" name="scs" value="0" size="2" maxlength="2" />Seconds<br/>
       
     </form>
-
-      <div>
+ <br />
+  <br />
+      <div id="notifi">
       <tr>
-        <th>Input your own notification text:&nbsp;</th>
-        <td>
-          <textarea id="message">Goodbye Netflix~! Let's do some amazing work:)!</textarea>
-        </td>
+        <th>Input notification text:&nbsp;&nbsp;&nbsp;</th>
+        <th>
+          <textarea rows = "1" cols="45" id="message">Goodbye Netflix~! Let's do some amazing work:)!</textarea>
+        </th>
+        <th></th>
       </tr>
       </div>
       
     </div>
- 
-    <input type="button" id="start" value="Start"/>
-      Countdown Timer: &nbsp; <span id="showmns">00</span>:<span id="showscs">00</span>
+ <br />
+  <br />
+   <br />
+      <input type="button" id="start" value="Start"/>
+      <div id="count">Countdown Timer: &nbsp; </div>
+      <div id="countDown"><span id="showmns">00</span>:<span id="showscs">00</span></div>
 
 <!--       <div>Netflix
         &nbsp;

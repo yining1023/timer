@@ -30,20 +30,20 @@ function save_options() {
   }
 
   //Save tracking list
-  var trackListEl = document.getElementById("tracklist");
-  console.log(trackListEl);
-  var tracklist_domains = trackListEl.value.split(/\r?\n/);
-  var tracklist = [];
-  // Get rid of empty lines
-  for (var i = 0; i < tracklist_domains.length; i++) {
-    var trackdomain = tracklist_domains[i];
-    if (trackdomain) {
-      tracklist.push(trackdomain);
-    }
-  }
-  trackListEl.value = tracklist.join('\n');
-  localStorage["tracklist"] = JSON.stringify(tracklist);
-  console.log(tracklist);
+  // var trackListEl = document.getElementById("tracklist");
+  // console.log(trackListEl);
+  // var tracklist_domains = trackListEl.value.split(/\r?\n/);
+  // var tracklist = [];
+  // // Get rid of empty lines
+  // for (var i = 0; i < tracklist_domains.length; i++) {
+  //   var trackdomain = tracklist_domains[i];
+  //   if (trackdomain) {
+  //     tracklist.push(trackdomain);
+  //   }
+  // }
+  // trackListEl.value = tracklist.join('\n');
+  // localStorage["tracklist"] = JSON.stringify(tracklist);
+  // console.log(tracklist);
 
   // Check limit data
   var limit_data = document.getElementById("chart_limit");

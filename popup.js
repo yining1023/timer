@@ -1,6 +1,6 @@
 //change the progress bar
 var netflix = false;
-var barTimerSt = false
+var barTimerSt = false;
 
 var i = 100;
 // var time = 15;
@@ -21,7 +21,7 @@ function getCurrentTabUrl(callback) {
     var tab = tabs[0];
     var url = tab.url;
     var domain = extractDomain(url);
-    document.getElementById('cureent_tab').innerHTML += domain;
+    document.getElementById('cureent_tab_url').innerHTML = domain;
       if(url.indexOf("netflix") > -1){
         netflix = true;
       }
@@ -29,11 +29,13 @@ function getCurrentTabUrl(callback) {
         netflix = false;
       }
    });
+  // console.log("netflix: " + netflix);
+  setTimeout('getCurrentTabUrl', 1000);
 }
 
 var alarmClock = {
         onHandler : function(e) {
-          console.log("netflix: " + netflix);
+          
           // if(netflix){
             // chrome.alarms.create("myAlarm", {delayInMinutes: 0.25, periodInMinutes: 0.25} );}
                     // window.close();
@@ -61,9 +63,9 @@ var alarmClock = {
 var bg = chrome.extension.getBackgroundPage();
 
 // Load the Visualization API and the piechart package.
-// google.load('visualization', '1.0', {'packages':['corechart', 'table']});
+google.load('visualization', '1.0', {'packages':['corechart', 'table']});
 // google.load('visualization', '1.1', {'packages':["bar"]});
-google.load("visualization", "1", {packages:["corechart"]});
+// google.load("visualization", "1.0", {packages:["corechart"]});
 // google.setOnLoadCallback(drawBasic);
 // Set a callback to run when the Google Visualization API is loaded.
 if (top === self) {
@@ -265,12 +267,12 @@ function show(mode) {
 // draws it.
 function drawChart(chart_data) {
 // Create the data table.
-  console.log(chart_data);
+  // console.log(chart_data);
   var data = new google.visualization.DataTable();
   data.addColumn('string', 'Domain');
   data.addColumn('number', 'Time');
   data.addRows(chart_data);
-  console.log(data);
+  // console.log(data);
   // Set chart options
   var options = {
     tooltip: {
@@ -287,14 +289,97 @@ function drawChart(chart_data) {
   chart.draw(data, options);
 }
 
+function hsvToRgb(h, s, v) {
+  var r, g, b;
+  var i;
+  var f, p, q, t;
+ 
+  // Make sure our arguments stay in-range
+  h = Math.max(0, Math.min(360, h));
+  s = Math.max(0, Math.min(100, s));
+  v = Math.max(0, Math.min(100, v));
+ 
+  // We accept saturation and value arguments from 0 to 100 because that's
+  // how Photoshop represents those values. Internally, however, the
+  // saturation and value are calculated from a range of 0 to 1. We make
+  // That conversion here.
+  s /= 100;
+  v /= 100;
+ 
+  if(s == 0) {
+    // Achromatic (grey)
+    r = g = b = v;
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+  }
+ 
+  h /= 60; // sector 0 to 5
+  i = Math.floor(h);
+  f = h - i; // factorial part of h
+  p = v * (1 - s);
+  q = v * (1 - s * f);
+  t = v * (1 - s * (1 - f));
+ 
+  switch(i) {
+    case 0:
+      r = v;
+      g = t;
+      b = p;
+      break;
+ 
+    case 1:
+      r = q;
+      g = v;
+      b = p;
+      break;
+ 
+    case 2:
+      r = p;
+      g = v;
+      b = t;
+      break;
+ 
+    case 3:
+      r = p;
+      g = q;
+      b = v;
+      break;
+ 
+    case 4:
+      r = t;
+      g = p;
+      b = v;
+      break;
+ 
+    default: // case 5:
+      r = v;
+      g = p;
+      b = q;
+  }
+ 
+  return colorRgb = [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
 function drawBasic(chart_data){
   // console.log(chart_data);
   var bardata = new google.visualization.DataTable();
   bardata.addColumn('string', 'Domain');
   bardata.addColumn('number', 'Time');
-  // bardata.addColumn('string', 'role:\'style\'');
   bardata.addRows(chart_data);
+  bardata.addColumn({ type: 'string', role: 'style' });
   // console.log(bardata);
+  var num = chart_data.length;
+  for(var i=0; i<chart_data.length; i++){
+    var h = -15+360*i/(num);
+    // console.log(h);
+    var s = 70;
+    var v = 95;
+    colorRgb = hsvToRgb(h,s,v);
+    var r = colorRgb[0];
+    var g = colorRgb[1];
+    var b = colorRgb[2];
+    bardata.setValue(i, 2, 'rgb('+r+','+ g+','+ b +')');
+    // console.log('rgb('+r+','+ g+','+ b +')');
+  }
 
   var view = new google.visualization.DataView(bardata);
       view.setColumns([0, 1,
@@ -302,10 +387,15 @@ function drawBasic(chart_data){
                          sourceColumn: 1,
                          type: "string",
                          role: "annotation" }
-                       ]);
+                       ,2]);
   // console.log(view);
 
   var options = {
+    colors: ['#003a72'],
+    // colors: ['#555555'],
+    backgroundColor: "#a8deef",
+    fontSize: 14, 
+    fontName: "lato",
     title: 'Time you spent on the most visited Websites',
     width: 700,
     legend: { position: 'none' },
@@ -361,7 +451,7 @@ function share() {
 
   document.addEventListener('DOMContentLoaded', function () {
     getCurrentTabUrl(function(url) {
-      console.log("url: "+url);
+      // console.log("url: "+url);
     });
     // document.getElementById('alarmOff').addEventListener('click', alarmClock.offHandler);
     document.querySelector('#today').addEventListener('click', function() { show(bg.TYPE.today); });
@@ -370,9 +460,9 @@ function share() {
     document.querySelector('#options').addEventListener('click', showOptions);
     document.querySelector('#start').addEventListener('click', countdownTimer);
     document.querySelector('#start').addEventListener('click', alarm);
-
   // document.querySelector('#share').addEventListener('click', share);
-});
+  });
+
     /* Function to display a Countdown timer with starting time from a form */
     // sets variables for minutes and seconds
 var ctmnts = 0;
@@ -381,8 +471,10 @@ var startchr = 0;// used to control when to read data from form
 
 function alarm(){
   var time = ctmnts+ctsecs/60;
-  console.log("created an alarm");
+  // console.log("created an alarm");
   chrome.alarms.create("myAlarm", {delayInMinutes: time, periodInMinutes: time});
+  var message = document.getElementById('message').value;
+  console.log(message);
 }
 
 function countdownTimer() {
