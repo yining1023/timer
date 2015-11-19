@@ -473,8 +473,8 @@ function alarm(){
   var time = ctmnts+ctsecs/60;
   // console.log("created an alarm");
   chrome.alarms.create("myAlarm", {delayInMinutes: time, periodInMinutes: time});
-  var message = document.getElementById('message').value;
-  console.log(message);
+  // var message = document.getElementById('message').value;
+  // console.log(message);
 }
 
 function countdownTimer() {
